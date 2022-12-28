@@ -6,13 +6,21 @@ ADD x86_64/78a4419835daefc8deffedf3219783e7d91eba0886b8147025d505bdbaf0e9d9.tar.
 ADD x86_64/80c057aa0a5b7e97f38c607573dae2a82944a7a6c6531589b77987f068a5563b.tar.xz /
 ADD x86_64/93661b2b6c8ea08a0595e46a576884ea04255b6365ac39de4a4559a8784b5409.tar.xz /
 
+ENV VERSION_AMPLIFY=7.6.14
+ENV VERSION_YARN=1.22.19
+
 ENV LANG=en_US.UTF-8
 ENV TZ=:/etc/localtime
 ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin
-ENV LD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib
-ENV LAMBDA_TASK_ROOT=/var/task
-ENV LAMBDA_RUNTIME_DIR=/var/runtime
 
-WORKDIR /var/task
+RUN yum -y update && \
+    yum -y install \
+        git \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
-ENTRYPOINT ["/lambda-entrypoint.sh"]
+RUN /bin/bash -c "npm install -g yarn@${VERSION_YARN}"
+
+RUN /bin/bash -c "npm install -g @aws-amplify/cli@${VERSION_AMPLIFY}"
+
+ENTRYPOINT [ "bash", "-c" ]
