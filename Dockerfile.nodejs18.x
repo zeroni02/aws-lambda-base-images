@@ -15,7 +15,7 @@ ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin
 
 RUN yum -y update && \
     yum -y install \
-        git \
+        git python3 \
     yum clean all && \
     rm -rf /var/cache/yum
 
