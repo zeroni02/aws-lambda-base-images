@@ -6,21 +6,23 @@ ADD x86_64/78a4419835daefc8deffedf3219783e7d91eba0886b8147025d505bdbaf0e9d9.tar.
 ADD x86_64/80c057aa0a5b7e97f38c607573dae2a82944a7a6c6531589b77987f068a5563b.tar.xz /
 ADD x86_64/93661b2b6c8ea08a0595e46a576884ea04255b6365ac39de4a4559a8784b5409.tar.xz /
 
-ENV VERSION_AMPLIFY=7.6.14
-ENV VERSION_YARN=1.22.19
-
 ENV LANG=en_US.UTF-8
 ENV TZ=:/etc/localtime
 ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin
 
+RUN yum -y install tar gzip unzip python3 jq curl base64 sqlite3
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
 RUN yum -y update && \
     yum -y install \
-        git python3 make gcc* \
+        unzip jq curl \
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN /bin/bash -c "npm install -g yarn@${VERSION_YARN}"
-
-RUN /bin/bash -c "npm install -g @aws-amplify/cli@${VERSION_AMPLIFY}"
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
 
 ENTRYPOINT [ "bash", "-c" ]
